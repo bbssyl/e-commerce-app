@@ -13,7 +13,6 @@ const CartComponents = ({ handleCartClose }) => {
   const handleDelete = (id) => {
     dispatch(removeFromCart(id));
   };
-  console.log(cartProducts);
   return (
     <Box
       sx={{
