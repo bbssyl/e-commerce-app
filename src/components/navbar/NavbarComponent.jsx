@@ -43,6 +43,7 @@ const NavbarComponent = () => {
 
   const handleCartOpen = () => {
     setOpenCartNav(true);
+    setOpenMobileNav(null)
   };
   const handleCartClose = () => {
     setOpenCartNav(false);
@@ -72,6 +73,7 @@ const NavbarComponent = () => {
 
   const handleAccountOpen = (event) => {
     setOpenAccountNav(event.currentTarget);
+    setOpenMobileNav(null)
   };
   const handleAccountClose = () => {
     setOpenAccountNav(null);
@@ -84,7 +86,7 @@ const NavbarComponent = () => {
       keepMounted
       open={Boolean(openAccountNav)}
       onClose={handleAccountClose}
-      sx={{ my: 5 }}
+      sx={{ my: 5, }}
     >
       <Box
         sx={{
@@ -121,7 +123,15 @@ const NavbarComponent = () => {
       open={Boolean(openMobileNav)}
       onClose={handleMobileClose}
     >
-      <MenuItem>Sepetim</MenuItem>
+      <MenuItem onClick={handleCartOpen} >
+        Sepetim
+        {
+          cartProducts.length > 0 &&
+          <Badge badgeContent={cartProducts?.length} color="error">
+            <ShoppingCartIcon />
+          </Badge>
+        }
+      </MenuItem>
       <MenuItem>Hesap Bilgileri</MenuItem>
     </Menu>
   );
@@ -130,12 +140,6 @@ const NavbarComponent = () => {
     <Box sx={{ flexGrow: 1, mb: 2 }}>
       <AppBar position="static" sx={{ boxShadow: 0, bgcolor: "#222935" }}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            sx={{ display: { sm: "block", md: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h6"
             noWrap
