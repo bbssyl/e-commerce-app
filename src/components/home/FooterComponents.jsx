@@ -23,6 +23,7 @@ const FooterComponents = () => {
         display: "flex",
         justifyContent: "center",
         gap: 2,
+        mb: 3
       }}
     >
       <Grid xs={12} md={2}>

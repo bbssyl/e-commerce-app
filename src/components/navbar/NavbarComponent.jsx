@@ -22,15 +22,14 @@ import { useRouter } from "next/navigation";
 import CartComponents from "../product/CartComponents";
 import { useDispatch, useSelector } from "react-redux";
 import ClearIcon from "@mui/icons-material/Clear";
-import { addToCartFromCookies } from "@/slices/productsSlice";
+import { addToCartFromCookies, setOpenCartNav } from "@/slices/productsSlice";
 import { getCookie, removeCookies, setCookie } from "cookies-next";
 
 const NavbarComponent = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const cartCookies = getCookie("cart");
-  const { cartProducts } = useSelector(state => state.products)
-  const [openCartNav, setOpenCartNav] = useState(false);
+  const { cartProducts, openCartNav } = useSelector(state => state.products)
   const [openAccountNav, setOpenAccountNav] = useState(null);
   const [openMobileNav, setOpenMobileNav] = useState(null);
 
@@ -42,11 +41,11 @@ const NavbarComponent = () => {
   }, [cartCookies, dispatch])
 
   const handleCartOpen = () => {
-    setOpenCartNav(true);
+    dispatch(setOpenCartNav(true));
     setOpenMobileNav(null)
   };
   const handleCartClose = () => {
-    setOpenCartNav(false);
+    dispatch(setOpenCartNav(false));
   };
   const handleClearToCart = () => {
     setCookie("cart", [])
@@ -103,9 +102,9 @@ const NavbarComponent = () => {
         <Typography>email</Typography>
         <Typography>profil id</Typography>
       </Box>
-      <MenuItem onClick={handleAccountClose}>Hesap Detayı</MenuItem>
-      <MenuItem onClick={handleAccountClose}>Siparişlerim</MenuItem>
-      <MenuItem onClick={handleAccountClose}>Çıkış</MenuItem>
+      <MenuItem onClick={handleAccountClose}>Account Detail</MenuItem>
+      <MenuItem onClick={handleAccountClose}>Payments</MenuItem>
+      <MenuItem onClick={handleAccountClose}>Logout</MenuItem>
     </Menu>
   );
 
@@ -124,7 +123,7 @@ const NavbarComponent = () => {
       onClose={handleMobileClose}
     >
       <MenuItem onClick={handleCartOpen} >
-        Sepetim
+        My Cart
         {
           cartProducts.length > 0 &&
           <Badge badgeContent={cartProducts?.length} color="error">
@@ -132,7 +131,7 @@ const NavbarComponent = () => {
           </Badge>
         }
       </MenuItem>
-      <MenuItem>Hesap Bilgileri</MenuItem>
+      <MenuItem>Account Detail</MenuItem>
     </Menu>
   );
 

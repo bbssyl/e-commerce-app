@@ -5,6 +5,7 @@ import { Providers } from "./provider";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import FooterComponents from "@/components/home/FooterComponents";
+import MobileBar from "@/components/mobile/MobileBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
           <NavbarComponent />
           {children}
           <FooterComponents />
+          <MobileBar />
         </Providers>
       </body>
     </html>
