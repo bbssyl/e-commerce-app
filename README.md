@@ -1,6 +1,6 @@
 >FOR LIVE VERSION(VERCEL)
 
-[Fake E-Commerce-App](https://e-commerce-mvmog03yt-bbssyl.vercel.app/)
+[Fake E-Commerce-App](https://e-commerce-app-seven-sage.vercel.app/)
 
 >INFO ABOUT NEXT.JS
 
