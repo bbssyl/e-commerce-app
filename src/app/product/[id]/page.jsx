@@ -10,14 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { setCookie } from "cookies-next";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const SpecificProductPage = ({ params }) => {
-  const dispatch = useDispatch();
-  // const { singleProducts } = useSelector((state) => state.products);
   const [singleProducts, setSingleProducts] = useState(null);
   const [currentImage, setCurrentImage] = useState(null);
+  const { cartProducts } = useSelector(state => state.products)
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchSingleProduct(params.id);
@@ -29,6 +29,10 @@ const SpecificProductPage = ({ params }) => {
   const handleChangeImage = (image) => {
     setCurrentImage(image);
   };
+  const handleAddCart = (product) => {
+    const updateCart = [...cartProducts, product]
+    setCookie("cart", JSON.stringify(updateCart))
+  }
   return (
     <>
       {singleProducts ? (
@@ -184,7 +188,7 @@ const SpecificProductPage = ({ params }) => {
                           singleProducts.price -
                           (singleProducts.price *
                             singleProducts.discountPercentage) /
-                            100;
+                          100;
                         return (
                           <Typography variant="h6" color="green">
                             ${result.toFixed(2)}
@@ -204,7 +208,7 @@ const SpecificProductPage = ({ params }) => {
                   </Typography>
                 </Box>
                 <Box>
-                  <Button variant="contained" color="secondary">
+                  <Button variant="contained" color="secondary" onClick={() => handleAddCart(singleProducts)}>
                     Add to cart
                   </Button>
                 </Box>

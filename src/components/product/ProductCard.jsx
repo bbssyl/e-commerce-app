@@ -9,39 +9,48 @@ import {
   Chip,
   IconButton,
   Rating,
-  Skeleton,
   Snackbar,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 // import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/slices/productsSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCookie, setCookie } from "cookies-next";
 
 const ProductCard = ({ product, currentShow }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const cartCookie = getCookie("cart")
+  const [cartProducts, setCartProducts] = useState([])
   const [state, setState] = useState({
     open: false,
     info: "success",
     message: "",
   });
-  const handleClick = (id) => {
-    router.push(`product/${id}`);
-  };
+
+  useEffect(() => {
+    if (cartCookie) {
+      setCartProducts(JSON.parse(cartCookie))
+    }
+  }, [cartCookie])
 
   const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
+    const updateProduct = [...cartProducts, product]
+    setCookie("cart", JSON.stringify(updateProduct))
     setState({
       open: true,
       info: "success",
       message: "Ürün başarıyla sepete eklendi.",
     });
+    router.refresh()
   };
 
+  const handleClick = (id) => {
+    router.push(`product/${id}`);
+  };
   const handleClose = () => {
     setState({ open: false });
   };
@@ -265,17 +274,19 @@ const ProductCard = ({ product, currentShow }) => {
                 readOnly
               />
             </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Box>
-                <IconButton>
-                  <AddShoppingCartIcon />
-                </IconButton>
-              </Box>
-              <Box>
-                <IconButton>
-                  <FavoriteBorderIcon />
-                </IconButton>
-              </Box>
+          </Box>
+        </CardContent>
+        <CardContent>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Box>
+              <IconButton onClick={() => handleAddToCart(product)}>
+                <AddShoppingCartIcon />
+              </IconButton>
+            </Box>
+            <Box>
+              <IconButton>
+                <FavoriteBorderIcon />
+              </IconButton>
             </Box>
           </Box>
         </CardContent>

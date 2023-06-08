@@ -17,18 +17,29 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CartComponents from "../product/CartComponents";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ClearIcon from "@mui/icons-material/Clear";
+import { addToCartFromCookies } from "@/slices/productsSlice";
+import { getCookie, removeCookies, setCookie } from "cookies-next";
 
 const NavbarComponent = () => {
   const router = useRouter();
-  const { cartProducts } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+  const cartCookies = getCookie("cart");
+  const { cartProducts } = useSelector(state => state.products)
   const [openCartNav, setOpenCartNav] = useState(false);
   const [openAccountNav, setOpenAccountNav] = useState(null);
   const [openMobileNav, setOpenMobileNav] = useState(null);
+
+
+  useEffect(() => {
+    if (cartCookies?.length > 0) {
+      dispatch(addToCartFromCookies(JSON.parse(cartCookies)))
+    }
+  }, [cartCookies, dispatch])
 
   const handleCartOpen = () => {
     setOpenCartNav(true);
@@ -36,11 +47,14 @@ const NavbarComponent = () => {
   const handleCartClose = () => {
     setOpenCartNav(false);
   };
+  const handleClearToCart = () => {
+    setCookie("cart", [])
+  }
 
   const renderCartMenu = (
     <Drawer anchor="right" open={openCartNav} onClose={handleCartClose}>
-      {cartProducts.length > 0 ? (
-        <CartComponents handleCartClose={handleCartClose} />
+      {cartProducts?.length > 0 ? (
+        <CartComponents handleCartClose={handleCartClose} handleClearToCart={handleClearToCart} />
       ) : (
         <Box>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -140,7 +154,7 @@ const NavbarComponent = () => {
           <Box sx={{ flexGrow: 1 }}></Box>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton size="large" color="inherit" onClick={handleCartOpen}>
-              <Badge badgeContent={cartProducts.length} color="error">
+              <Badge badgeContent={cartProducts?.length} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>

@@ -1,18 +1,18 @@
 "use client";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import Image from "next/image";
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ClearIcon from "@mui/icons-material/Clear";
 import { removeFromCart } from "@/slices/productsSlice";
-const CartComponents = ({ handleCartClose }) => {
+const CartComponents = ({ handleCartClose, handleClearToCart }) => {
   const dispatch = useDispatch();
   const { cartProducts } = useSelector((state) => state.products);
 
   const handleDelete = (id) => {
     dispatch(removeFromCart(id));
   };
+
   return (
     <Box
       sx={{
@@ -72,6 +72,9 @@ const CartComponents = ({ handleCartClose }) => {
           </Box>
         );
       })}
+      <Box sx={{ flexGrow: 1 }}>
+        <Button onClick={handleClearToCart}>Clear All</Button>
+      </Box>
     </Box>
   );
 };

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getCookie } from "cookies-next";
 const initialState = {
   products: [],
   categorisedProducts: [],
@@ -33,11 +34,14 @@ const productsSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    addToCart: (state, action) => {
-      const { id } = action.payload || {};
-      if (id && !state.cartProducts.some((cart) => cart.id === id)) {
-        state.cartProducts = [...state.cartProducts, { ...action.payload }];
-      }
+
+    addToCartFromCookies: (state, action) => {
+      // const { id } = action.payload || {};
+      // if (id && !state.cartProducts.some((cart) => cart.id === id)) {
+      //   state.cartProducts = [...state.cartProducts, { ...action.payload }];
+      // }
+      state.cartProducts = [...action.payload]
+
     },
     removeFromCart: (state, action) => {
       state.cartProducts = state.cartProducts.filter(
@@ -58,6 +62,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, resetCart } = productsSlice.actions;
+export const { addToCartFromCookies, removeFromCart, resetCart } = productsSlice.actions;
 
 export default productsSlice.reducer;
